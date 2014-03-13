@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <include file="com/platform/config/platform.xml"></include>
+  <!-- 配置中文支持 -->
+    <constant name="struts.i18n.encoding" value="utf-8"></constant>
+    <constant name="struts.multipart.maxSize" value="1024102400"></constant>
+	<!-- 开发模式 -->
+    <constant name="struts.devMode" value="false" />
+	<!-- spring 进行管理 -->
+    <constant name="struts.objectFactory" value="spring" />
+
+    <package name="base" namespace="/" extends="struts-default,json-default">
+        <interceptors>
+            <!-- 定义权限控制拦截器 -->
+            <interceptor name="checkLogin" class="com.platform.interceptor.LoginInterceptor" />
+            <interceptor name="auth" class="com.platform.interceptor.AuthInterceptor" />
+            <interceptor name="forceNoChahe" class="com.platform.interceptor.ForceNoChaheInterceptor" />
+            <interceptor-stack name="checkAuth">
+                <interceptor-ref name="checkLogin" />
+                <interceptor-ref name="auth" />
+                <interceptor-ref name="forceNoChahe" />
+                <interceptor-ref name="defaultStack" />
+            </interceptor-stack>
+        </interceptors>
+		<!-- 定义全局处理结果 -->
+        <global-results>
+            <result name="Exception">/pages/jsp/common/error.jsp</result>
+            <result name="noRight">/pages/jsp/common/noRights.jsp</result>
+            <result name="reLogin">/pages/jsp/common/reLogin.jsp</result>
+        </global-results>
+        <global-exception-mappings>
+            <exception-mapping exception="java.sql.SQLException" result="Exception" />
+            <exception-mapping exception="java.lang.Exception" result="Exception" />
+        </global-exception-mappings>
+        <action name="loginAction" class="loginAction">
+            <result>/pages/index.jsp</result>
+            <result name="login">login.jsp</result>
+        </action>
+        <action name="ssologinAction" class="ssologinAction">
+            <result>/pages/index.jsp</result>
+            <result name="login">login.jsp</result>
+        </action>
+        <action name="logoutAction" class="logoutAction">
+            <result>login.jsp</result>
+        </action>
+    </package>
+</struts>

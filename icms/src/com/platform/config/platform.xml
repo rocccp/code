@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <package name="platform" namespace="/platform" extends="base">
+        <action name="platformIndexAction">
+            <interceptor-ref name="checkAuth"></interceptor-ref>
+            <result>/pages/jsp/uniauth/platform/platformList.jsp</result>
+        </action>
+        <action name="platformBaseAction_*" class="platformAction" method="{1}">
+            <result></result>
+        </action>
+        <action name="authIndexAction">
+            <interceptor-ref name="checkAuth"></interceptor-ref>
+            <result>/pages/jsp/uniauth/auth/authList.jsp</result>
+        </action>
+        <action name="authBaseAction_*" class="authAction" method="{1}">
+            <result></result>
+        </action>
+        <action name="roleIndexAction">
+            <interceptor-ref name="checkAuth"></interceptor-ref>
+            <result>/pages/jsp/uniauth/role/roleList.jsp</result>
+        </action>
+
+        <action name="roleBaseAction_*" class="roleAction" method="{1}">
+            <result></result>
+            <result name="auth">/pages/jsp/uniauth/role/authList.jsp</result>
+        </action>
+
+
+        <action name="orgIndexAction" class="orgAction" method="index">
+            <interceptor-ref name="checkAuth"></interceptor-ref>
+            <result>/pages/jsp/uniauth/org/org.jsp</result>
+        </action>
+
+        <action name="orgBaseAction_*" class="orgAction" method="{1}">
+            <result></result>
+        </action>
+
+        <action name="userIndexAction" class="orgAction">
+            <interceptor-ref name="checkAuth"></interceptor-ref>
+            <result>/pages/jsp/uniauth/user/user.jsp</result>
+        </action>
+
+        <action name="platformAction_*" class="platformAction" method="{1}">
+            <result type="json">
+            </result>
+        </action>
+        <action name="authAction_*" class="authAction" method="{1}">
+            <result type="json">
+            </result>
+        </action>
+        <action name="authPathAction_*" class="authPathAction" method="{1}">
+            <result type="json">
+            </result>
+        </action>
+        <action name="roleAction_*" class="roleAction" method="{1}">
+            <result type="json">
+            </result>
+        </action>
+
+        <action name="userRolesAction_*" class="userRolesAction" method="{1}">
+            <result type="json">
+            </result>
+        </action>
+
+        <action name="userAction_*" class="userAction" method="{1}">
+            <interceptor-ref name="checkAuth"></interceptor-ref>
+            <result type="json">
+            </result>
+            <result name="ajax" type="json">
+                <param name="root">msg<!-- result是action中设置的变量名，也是页面需要返回的数据，该变量必须有setter和getter方法 --></param>
+            </result>
+        </action>
+
+        <action name="passwordAction_*" class="passwordAction" method="{1}">
+            <interceptor-ref name="checkAuth"></interceptor-ref>
+            <result type="json">
+            </result>
+            <result name="index">
+                /pages/jsp/uniauth/password/password.jsp
+            </result>
+            <result name="ajax" type="json">
+                <param name="root">msg</param>
+            </result>
+        </action>
+    </package>
+</struts>

@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
+       http://www.springframework.org/schema/context 
+       http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+	<!-- 支持spring annotation -->
+    <context:component-scan base-package="com" />
+	<!-- 定义数据源的Bean ，给Hibernate的sessionFactory-->
+
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <property name="driverClass" value="com.mysql.jdbc.Driver" />
+        <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/icms" />
+        <property name="user" value="root" />
+        <property name="password" value="root" />
+        <property name="minPoolSize" value="5" />
+        <property name="maxPoolSize" value="30" />
+        <property name="initialPoolSize" value="10" />
+        <property name="maxIdleTime" value="1800" />
+        <property name="acquireIncrement" value="5" />
+        <property name="maxStatements" value="0" />
+        <property name="idleConnectionTestPeriod" value="60" />
+        <property name="acquireRetryAttempts" value="10" />
+        <property name="acquireRetryDelay" value="1000" />
+        <property name="breakAfterAcquireFailure" value="false" />
+        <property name="testConnectionOnCheckout" value="false" />
+        <property name="testConnectionOnCheckin" value="true" />
+        <property name="preferredTestQuery" value="SELECT 1 FROM ods..T_DJ_NSRJBDJXX WHERE 1=0" />
+    </bean>
+
+	<!-- 定义Hibernate的sessionFactory，通过该Bean，可以获得Hibernate的Session-->
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="packagesToScan">
+            <list>
+                <value>com.icms.entity.*</value>
+                <value>com.platform.entity.*</value>
+            </list>
+        </property>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">
+                    org.hibernate.dialect.MySQLDialect
+                </prop>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.cache.use_query_cache">true</prop>
+                <prop key="hibernate.cache.use_second_level_cache">
+                    true
+                </prop>
+                <prop key="hibernate.cache.provider_class">
+                    org.hibernate.cache.EhCacheProvider
+                </prop>
+            </props>
+        </property>
+    </bean>
+
+<!-- 
+    <bean id="dataSourceNES" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <property name="driverClass" value="com.mysql.jdbc.Driver" />
+        <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/nes" />
+        <property name="user" value="root" />
+        <property name="password" value="root" />
+        <property name="minPoolSize" value="5" />
+        <property name="maxPoolSize" value="30" />
+        <property name="initialPoolSize" value="10" />
+        <property name="maxIdleTime" value="1800" />
+        <property name="acquireIncrement" value="5" />
+        <property name="maxStatements" value="0" />
+        <property name="idleConnectionTestPeriod" value="60" />
+        <property name="acquireRetryAttempts" value="10" />
+        <property name="acquireRetryDelay" value="1000" />
+        <property name="breakAfterAcquireFailure" value="false" />
+        <property name="testConnectionOnCheckout" value="false" />
+        <property name="testConnectionOnCheckin" value="true" />
+        <property name="preferredTestQuery" value="SELECT 1 FROM ods..T_DJ_NSRJBDJXX WHERE 1=0" />
+    </bean>
+
+    <bean id="sessionFactoryNES" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+        <property name="dataSource" ref="dataSourceNES" />
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">
+                    org.hibernate.dialect.MySQLDialect
+                </prop>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.cache.use_query_cache">true</prop>
+                <prop key="hibernate.cache.use_second_level_cache">
+                    true
+                </prop>
+                <prop key="hibernate.cache.provider_class">
+                    org.hibernate.cache.EhCacheProvider
+                </prop>
+            </props>
+        </property>
+    </bean>
+ -->
+    <bean id="hibernateTemplates" class="com.platform.dao.base.HibernateTemplates">
+        <property name="templates">
+            <map>
+                <entry key="DEFAULT" value-ref="hibernateTemplate"></entry>
+              <!--   <entry key="NES" value-ref="hibernateTemplateNes"></entry> -->
+            </map>
+        </property>
+    </bean>
+
+	<!-- hibernateTemplate  -->
+    <bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate">
+        <property name="sessionFactory">
+            <ref bean="sessionFactory" />
+        </property>
+    </bean>
+
+<!-- 
+    <bean id="hibernateTemplateNes" class="org.springframework.orm.hibernate3.HibernateTemplate">
+        <property name="sessionFactory">
+            <ref bean="sessionFactoryNES" />
+        </property>
+    </bean>
+ -->   
+	<!-- 配置事务管理器 -->
+    <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="sessionFactory">
+            <ref local="sessionFactory" />
+        </property>
+    </bean>
+
+	<!-- 配置事务特性 ，配置add、delete和update开始的方法，事务传播特性为required-->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="save*" propagation="REQUIRED" rollback-for="Exception" />
+            <tx:method name="delete*" propagation="REQUIRED" rollback-for="Exception" />
+            <tx:method name="update*" propagation="REQUIRED" rollback-for="Exception" />
+            <tx:method name="*" propagation="REQUIRED" read-only="true" />
+        </tx:attributes>
+    </tx:advice>
+	<!--
+		配置那些类的方法进行事务管理，当前com.icms.service包中的子包、类中所有方法需要，还需要参考tx:advice的设置
+	-->
+    <aop:config>
+        <aop:pointcut id="serviceManagerMethod" expression="execution (* com.*.*(..))" />
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="serviceManagerMethod" />
+    </aop:config>
+</beans>
