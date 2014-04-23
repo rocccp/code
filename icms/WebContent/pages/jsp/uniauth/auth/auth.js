@@ -448,7 +448,6 @@ $(function() {
 					var id = $('#authRootId').val();
 					var url = "platform/authPathAction_delete";
 					var params = "id=" + id + "&delId=" + ids;
-					alert(params);
 					$.ajax({
 						type : "post",
 						url : url,

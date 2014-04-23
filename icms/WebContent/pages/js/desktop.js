@@ -1,9 +1,3 @@
-/*-----------------------------------------------------------------------------
- *作者:Muzi*lei , email:530624206@qq.com
- *http://www.muzilei.com/
- *version:1.0  , 时间：2011-09-14
- *desktop需引入myLib.js创建命名空间，和jquery 及 jquery ui,contextMenu jquery插件
------------------------------------------------------------------------------*/
 //声明desktop空间,封装相关操作
 myLib.NS("desktop");
 myLib.desktop = {
@@ -241,7 +235,7 @@ myLib.desktop.win = {
 		var wLeft = myLib._is(options['WindowPositionLeft'], "Number") ? options['WindowPositionLeft']
 				+ dxy - panelLeft.left
 				: (wh['w'] - options['WindowWidth']) / 2 + dxy - panelLeft.left;
-		wLeft = 50;
+		wLeft = wLeft - 50;
 		var wTop = myLib._is(options['WindowPositionTop'], "Number") ? options['WindowPositionTop']
 				+ dxy / 2
 				: (wh['h'] - options['WindowHeight']) / 2 + dxy / 2;
@@ -595,12 +589,12 @@ myLib.desktop.lrBar = {
 			myLib.fullscreenIE();
 			myLib.exitFullscreen();
 		});
-		
+
 		// 全屏
 		$("#shizhong_btn").toggle(function() {
-			 $("#datetime").hide();
+			$("#datetime").hide();
 		}, function() {
-			 $("#datetime").show();
+			$("#datetime").show();
 		});
 
 		$("#weather_btn").click(function() {
@@ -808,10 +802,9 @@ myLib.desktop.navBar = {
 		var myData = myLib.desktop.getMydata(), $navBar = myData.panel.navBar, $innerPanel = myData.panel.desktopPanel.innerPanel, $navTab = $navBar
 				.find("a"), $deskIcon = myData.panel.desktopPanel['deskIcon'], desktopWidth = $deskIcon
 				.width(), lBarWidth = myData.panel.lrBar["_this"].outerWidth();
-/*
-		$navBar.draggable({
-			scroll : false
-		});*/
+		/*
+		 * $navBar.draggable({ scroll : false });
+		 */
 
 		$navTab.droppable(
 				{
@@ -830,8 +823,7 @@ myLib.desktop.navBar = {
 						myLib.desktop.deskIcon.init();
 						myLib.desktop.lrBar.init();
 					}
-				})
-				.click(
+				}).click(
 				function(event) {
 					event.preventDefault();
 					event.stopPropagation();

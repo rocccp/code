@@ -93,8 +93,15 @@ public class BaseDao extends Base
 				list = criteria.setFirstResult(firstResult).setMaxResults(pageSize).list();
 				map.put("list", list);
 				criteria.setFirstResult(0).setMaxResults(214783647);
-				map.put("totalCount",
-						((Integer) criteria.setProjection(Projections.rowCount()).uniqueResult()).intValue());
+				Object obj = criteria.setProjection(Projections.rowCount()).uniqueResult();
+				if(obj!= null)
+				{
+				    map.put("totalCount",((Integer)obj ).intValue());
+				}else
+				{
+				    map.put("totalCount",0);
+				}
+				
 				return map;
 			}
 		});

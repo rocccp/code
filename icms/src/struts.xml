@@ -5,6 +5,7 @@
 
 <struts>
     <include file="com/platform/config/platform.xml"></include>
+    <include file="com/icms/webset/config/webSetmanagement.xml"></include>
   <!-- 配置中文支持 -->
     <constant name="struts.i18n.encoding" value="utf-8"></constant>
     <constant name="struts.multipart.maxSize" value="1024102400"></constant>

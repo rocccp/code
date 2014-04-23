@@ -40,8 +40,8 @@
         <property name="dataSource" ref="dataSource" />
         <property name="packagesToScan">
             <list>
-                <value>com.icms.entity.*</value>
                 <value>com.platform.entity.*</value>
+                <value>com.icms.webset.entity.*</value>
             </list>
         </property>
         <property name="hibernateProperties">
