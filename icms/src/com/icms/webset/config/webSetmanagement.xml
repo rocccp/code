@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="wsm" namespace="/wsm" extends="base">
+		<action name="wsmAction_*" class="websetManagerAction" method="{1}">
+			<result type="json"></result>
+			<interceptor-ref name="checkAuth"></interceptor-ref>
+			<result name="list">/pages/jsp/webset/websetmanager/websetmanager.jsp</result>
+		</action>
+	</package>
+</struts>
